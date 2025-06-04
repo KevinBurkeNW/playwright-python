@@ -157,7 +157,6 @@ class PipeTransport(Transport):
                     offset += len(data)
                     remaining -= len(data)
 
-                print(f"Deserializing buffer and handling message")
                 obj = self.deserialize_message(buf)
                 self.on_message(obj)
             except asyncio.IncompleteReadError:
@@ -166,7 +165,7 @@ class PipeTransport(Transport):
                         Exception("Connection closed while reading from the driver")
                     )
                 break
-            await asyncio.sleep(0)
+            # await asyncio.sleep(0)
 
         await self._proc.communicate()
         self._stopped_future.set_result(None)
