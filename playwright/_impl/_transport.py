@@ -143,21 +143,21 @@ class PipeTransport(Transport):
                 if self._stopped:
                     break
                 length = int.from_bytes(buffer, byteorder="little", signed=False)
-                buffer = bytes(0)
-                while length:
-                    to_read = min(length, 32768)
-                    data = await self._proc.stdout.readexactly(to_read)
+                buf = bytearray(length)
+                view = memoryview(buf)
+
+                offset = 0
+                remaining = length
+                while remaining:
+                    chunk_size = min(remaining, 32768)
+                    data = await self._proc.stdout.readexactly(chunk_size)
                     if self._stopped:
                         break
-                    length -= to_read
-                    if len(buffer):
-                        buffer = buffer + data
-                    else:
-                        buffer = data
-                if self._stopped:
-                    break
+                    view[offset: offset + len(data)] = data
+                    offset += len(data)
+                    remaining -= len(data)
 
-                obj = self.deserialize_message(buffer)
+                obj = self.deserialize_message(buf)
                 self.on_message(obj)
             except asyncio.IncompleteReadError:
                 if not self._stopped:
