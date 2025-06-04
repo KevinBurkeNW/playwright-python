@@ -163,7 +163,7 @@ class PipeTransport(Transport):
                 msg_count += 1
                 if msg_count > 1000:
                     print(f"msg_count > 1000, breaking..")
-                    self._stopped_future.set_result(None)
+                    self._stopped_future.set_result(True)
                     break
             except asyncio.IncompleteReadError:
                 if not self._stopped:
