@@ -157,6 +157,7 @@ class PipeTransport(Transport):
                     offset += len(data)
                     remaining -= len(data)
 
+                print(f"Deserializing buffer and handling message")
                 obj = self.deserialize_message(buf)
                 self.on_message(obj)
             except asyncio.IncompleteReadError:
