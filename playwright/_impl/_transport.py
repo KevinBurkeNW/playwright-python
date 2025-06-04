@@ -161,8 +161,8 @@ class PipeTransport(Transport):
                 # obj = self.deserialize_message(buf)
                 self.on_message(self.deserialize_message(buf))
                 msg_count += 1
-                if msg_count > 10:
-                    print(f"msg_count > 10, breaking..")
+                if msg_count > 100:
+                    print(f"msg_count > 100, breaking..")
                     break
             except asyncio.IncompleteReadError:
                 if not self._stopped:
