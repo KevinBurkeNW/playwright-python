@@ -81,11 +81,11 @@ class Transport(ABC):
         return msg.encode()
 
     def deserialize_message(self, data: Union[str, bytes]) -> ParsedMessagePayload:
-        obj = json.loads(data)
+        # obj = json.loads(data)
 
-        if "DEBUGP" in os.environ:  # pragma: no cover
-            print("\x1b[33mRECV>\x1b[0m", json.dumps(obj, indent=2))
-        return obj
+        # if "DEBUGP" in os.environ:  # pragma: no cover
+        #     print("\x1b[33mRECV>\x1b[0m", json.dumps(obj, indent=2))
+        return json.loads(data)
 
 
 class PipeTransport(Transport):
