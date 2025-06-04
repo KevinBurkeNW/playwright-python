@@ -283,7 +283,7 @@ class Connection(EventEmitter):
             await self._transport.run()
             print(f"Waiting for transport to stop")
             await self._transport.wait_until_stopped()
-            continue
+            print(f"Transport stopped. Re-creating.?")
 
 
     def stop_sync(self) -> None:
