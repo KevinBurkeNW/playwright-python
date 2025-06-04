@@ -278,7 +278,13 @@ class Connection(EventEmitter):
 
         await self._transport.connect()
         self._init_task = self._loop.create_task(init())
-        await self._transport.run()
+
+        while True:
+            await self._transport.run()
+            self._transport.request_stop()
+            await self._transport.wait_until_stopped()
+            await self._transport.run()
+
 
     def stop_sync(self) -> None:
         self._transport.request_stop()

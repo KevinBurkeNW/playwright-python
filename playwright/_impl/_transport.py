@@ -137,6 +137,7 @@ class PipeTransport(Transport):
     async def run(self) -> None:
         assert self._proc.stdout
         assert self._proc.stdin
+        msg_count = 0
         while not self._stopped:
             try:
                 buffer = await self._proc.stdout.readexactly(4)
@@ -159,6 +160,10 @@ class PipeTransport(Transport):
 
                 # obj = self.deserialize_message(buf)
                 self.on_message(self.deserialize_message(buf))
+                msg_count += 1
+                if msg_count > 10:
+                    print(f"msg_count > 10, breaking..")
+                    break
             except asyncio.IncompleteReadError:
                 if not self._stopped:
                     self.on_error_future.set_exception(
